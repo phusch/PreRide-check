@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PreRide" />
+  <meta name="theme-color" content="#111827" />
+  <title>PreRide Alpen SOP</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card2: #1f2937;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --accent: #f59e0b;
+      --ok: #22c55e;
+      --line: rgba(255,255,255,.12);
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #020617 0%, var(--bg) 42%, #111827 100%);
+      color: var(--text);
+      padding: env(safe-area-inset-top) 14px env(safe-area-inset-bottom);
+      min-height: 100vh;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15,23,42,.92);
+      backdrop-filter: blur(16px);
+      padding: 16px 0 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 { margin: 0; font-size: 24px; letter-spacing: -.02em; }
+    .subtitle { color: var(--muted); margin-top: 4px; font-size: 14px; }
+    .bar-wrap {
+      margin-top: 14px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      overflow: hidden;
+    }
+    .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--ok)); transition: width .25s ease; }
+    .status {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    main { padding: 14px 0 100px; }
+    section {
+      background: rgba(17,24,39,.9);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      margin: 14px 0;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.24);
+    }
+    .phase-head {
+      padding: 16px;
+      background: rgba(255,255,255,.04);
+      border-bottom: 1px solid var(--line);
+    }
+    h2 { margin: 0; font-size: 17px; letter-spacing: .02em; }
+    .focus { margin-top: 4px; color: var(--muted); font-size: 13px; }
+    label.item {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      align-items: start;
+      -webkit-tap-highlight-color: transparent;
+    }
+    label.item:last-child { border-bottom: 0; }
+    input[type="checkbox"] {
+      width: 23px;
+      height: 23px;
+      margin: 0;
+      accent-color: var(--ok);
+    }
+    .item-title { font-weight: 700; font-size: 15px; }
+    .item-text { color: var(--muted); font-size: 13px; line-height: 1.35; margin-top: 3px; }
+    .done .item-title, .done .item-text { opacity: .55; text-decoration: line-through; }
+    .controls {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+      background: rgba(2,6,23,.92);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 12px;
+      color: #111827;
+      font-weight: 800;
+      font-size: 15px;
+      background: var(--accent);
+    }
+    button.secondary { background: var(--card2); color: var(--text); border: 1px solid var(--line); }
+    .ready {
+      display: none;
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(34,197,94,.16);
+      border: 1px solid rgba(34,197,94,.45);
+      color: #dcfce7;
+      font-weight: 800;
+      text-align: center;
+    }
+    .ready.show { display: block; }
+    .smallnote { color: var(--muted); font-size: 12px; margin: 10px 2px 0; line-height: 1.35; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏍️ PreRide Alpen SOP</h1>
+    <div class="subtitle">R1300GS · Aviation-Style Motorcycle Checklist</div>
+    <div class="bar-wrap"><div class="bar" id="bar"></div></div>
+    <div class="status"><span id="count">0 / 0 Checks</span><span id="percent">0%</span></div>
+  </header>
+
+  <main id="list">
+    <section>
+      <div class="phase-head"><h2>PHASE 1 — HOTEL BRIEFING</h2><div class="focus">T-30 min · Planung & Baselayer</div></div>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Weather Briefing</div><div class="item-text">Tal und Passhöhe geprüft? Baselayer entschieden: Merino / Mesh?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Route & Navigation</div><div class="item-text">Tagesroute in Kurviger/BMW App geladen? Offline-Karten vollständig?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Hydration Plan</div><div class="item-text">Mindestens 1,5 Liter vorbereitet? Trinkbeutel/Flasche gefüllt?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Power Check</div><div class="item-text">iPhone mindestens 90%? Powerbank/Ladekabel dabei?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Cabin Sweep</div><div class="item-text">Zimmer leer? Schlüssel, Wallet, Dokumente, Brille, Regenzeug dabei?</div></div></label>
+    </section>
+
+    <section>
+      <div class="phase-head"><h2>PHASE 2 — VEHICLE PRE-FLIGHT</h2><div class="focus">T-10 min · Motorrad, Beladung & Sensorik</div></div>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Chigee / Mount</div><div class="item-text">Chigee eingesetzt und verriegelt? iPhone-Halterung geprüft?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Walkaround</div><div class="item-text">Reifen, Bremsen, Kardan, Undichtigkeiten und sichtbare Schäden geprüft?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Locks & Luggage</div><div class="item-text">Alle Schlösser entfernt? Koffer verriegelt? Gepäckrolle per Rütteltest geprüft?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Radar & Sensorik</div><div class="item-text">Frontradar sauber? Front frei von Schmutz/Insekten?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Fuel / Range</div><div class="item-text">Tankfüllstand und Reichweite ausreichend? Nächster Tankstopp bekannt?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Visibility</div><div class="item-text">Windschild und Helmvisier sauber?</div></div></label>
+    </section>
+
+    <section>
+      <div class="phase-head"><h2>PHASE 3 — AVIONICS & CONNECTIVITY</h2><div class="focus">T-5 min · Navigation, Warnsysteme & Helm</div></div>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Navigation Active</div><div class="item-text">Kurviger geöffnet? Route geladen? Navigation gestartet?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">ooono</div><div class="item-text">ooono App geöffnet und Verbindung aktiv?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Helmet Comms</div><div class="item-text">Bluetooth iPhone verbunden? Intercom an? Group Mesh aktiv?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Audio</div><div class="item-text">Musik gestartet oder bewusst aus? Lautstärke sicher eingestellt?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Phone Stowage</div><div class="item-text">iPhone sicher verstaut? Ladung aktiv, falls nötig?</div></div></label>
+    </section>
+
+    <section>
+      <div class="phase-head"><h2>PHASE 4 — PILOT EQUIPMENT</h2><div class="focus">T-2 min · Fahrer bereit</div></div>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Helmet Secure</div><div class="item-text">Kinnriemen geschlossen? Visierstellung passend: Lüftung / geschlossen?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Suit Configuration</div><div class="item-text">Talstart: Ventilation offen. Passstart/Kälte: Schotten dicht.</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Protection</div><div class="item-text">Knie-, Ellbogen-, Schulter- und Rückenprotektoren korrekt?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Gloves</div><div class="item-text">Handschuhe passend gewählt: Sommer / wasserdicht / Übergang?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Emergency Items</div><div class="item-text">Erste-Hilfe-Set, Ausweis, Führerschein und Fahrzeugpapiere dabei?</div></div></label>
+    </section>
+
+    <section>
+      <div class="phase-head"><h2>PHASE 5 — ENGINE START & CLEARANCE</h2><div class="focus">T-0 · Abfahrtssysteme</div></div>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Engine Start</div><div class="item-text">Motor starten. Keine ungewöhnlichen Geräusche? Keine Warnmeldungen?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Riding Mode</div><div class="item-text">Fahrmodus gewählt: ROAD / DYNAMIC / RAIN?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">DSA Suspension</div><div class="item-text">Fahrwerk passend eingestellt? Auto oder gewünschte Härte aktiv?</div></div></label>
+      <label class="item"><input type="checkbox"><div><div class="item-title">Final Bike Check</div><div class="item-text">Seitenständer eingeklappt? Spiegel korrekt? Umgebung frei?</div></div></label>
+    </section>
+
+    <div class="ready" id="ready">CLEARANCE COMPLETE — READY TO RIDE 🟢</div>
+    <div class="smallnote">Stand wird lokal in Safari gespeichert. „Reset“ setzt alle Checkboxen für die nächste Etappe zurück.</div>
+  </main>
+
+  <div class="controls">
+    <button class="secondary" id="reset">Reset</button>
+    <button id="top">Nach oben</button>
+  </div>
+
+  <script>
+    const KEY = 'preride-alpen-sop-v1';
+    const boxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+    const bar = document.getElementById('bar');
+    const count = document.getElementById('count');
+    const percent = document.getElementById('percent');
+    const ready = document.getElementById('ready');
+
+    function load() {
+      const saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+      boxes.forEach((box, i) => { box.checked = !!saved[i]; updateRow(box); });
+      updateProgress();
+    }
+    function save() {
+      localStorage.setItem(KEY, JSON.stringify(boxes.map(b => b.checked)));
+    }
+    function updateRow(box) {
+      box.closest('.item').classList.toggle('done', box.checked);
+    }
+    function updateProgress() {
+      const done = boxes.filter(b => b.checked).length;
+      const total = boxes.length;
+      const pct = total ? Math.round(done / total * 100) : 0;
+      bar.style.width = pct + '%';
+      count.textContent = done + ' / ' + total + ' Checks';
+      percent.textContent = pct + '%';
+      ready.classList.toggle('show', done === total);
+    }
+    boxes.forEach(box => box.addEventListener('change', () => {
+      updateRow(box); save(); updateProgress();
+    }));
+    document.getElementById('reset').addEventListener('click', () => {
+      if (confirm('Alle Checks für die nächste Etappe zurücksetzen?')) {
+        boxes.forEach(b => { b.checked = false; updateRow(b); });
+        save(); updateProgress(); window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+    document.getElementById('top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    load();
+  </script>
+</body>
+</html>
